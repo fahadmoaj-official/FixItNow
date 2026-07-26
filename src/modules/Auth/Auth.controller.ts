@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import sendResponse from "../../utils/sendResponse";
 import { AuthService } from "./Auth.service";
+import env from "../../config/env";
 
 
 const registerUser = async (req: Request, res: Response) => {
@@ -31,13 +32,31 @@ const registerUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
     try {
 
-        const result = await AuthService.loginUser(req.body);
+        const { user, accessToken, refreshToken } = await AuthService.loginUserIntoDb(req.body);
+
+        res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "none",
+        maxAge:  1 * 24 * 60 * 60 * 1000, // 1 days in milliseconds
+       });
+
+       res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "none",
+        maxAge:  5 * 24 * 60 * 60 * 1000, // 5 days in milliseconds
+       });
 
         sendResponse(res, {
             statusCode: httpStatus.OK,
             success: true,
             message: "User logged in successfully",
-            data: result
+            data: {
+                user,
+                accessToken,
+                refreshToken
+            }
         });
 
     }
@@ -56,13 +75,13 @@ const getMe = async (req: Request, res: Response) => {
     try {
 
         const user = req.user; // auth middelware
-
+       const result = await AuthService.getMeIntoDb(user?.id as string);
         
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "User profile fetched successfully",
-        data: req.user
+        data: result
       });
     }
     catch (error) {
