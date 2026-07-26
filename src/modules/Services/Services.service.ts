@@ -32,13 +32,9 @@ const GetAllServicesIntoDb = async () => {
   return services;
 };
 
-const GetAllCategoriesIntoDb = async () => {
-  const categories = await prisma.categories.findMany();
-  return categories;
-};
+
 
 export const ServicesService = {
   CreateAServicesIntoDb,
-  GetAllCategoriesIntoDb,
   GetAllServicesIntoDb,
 };

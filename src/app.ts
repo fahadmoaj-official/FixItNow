@@ -5,6 +5,7 @@ import express from "express";
 import env from "./config/env";
 import AuthRoute from "./modules/Auth/Auth.route";
 import ServiceRoute from "./modules/Services/Services.route";
+import CategoriesRoute from "./modules/categories/categories.route";
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", AuthRoute);
 app.use("/api/services", ServiceRoute);
+app.use("/api/categories", CategoriesRoute);
+
 
 
 export default app;
