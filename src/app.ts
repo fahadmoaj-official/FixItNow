@@ -1,29 +1,30 @@
-import express from "express"
-import type {Response,Request } from "express" 
-import env from "./config/env"
-import cors from "cors"
-import cookieParser from "cookie-parser"
-import AuthRoute from "./modules/Auth/Auth.route"
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import type { Request, Response } from "express";
+import express from "express";
+import env from "./config/env";
+import AuthRoute from "./modules/Auth/Auth.route";
+import ServiceRoute from "./modules/Services/Services.route";
 
 const app = express();
 
-
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
-app.use(cors({
+app.use(
+  cors({
     origin: env.APP_URL,
     credentials: true,
-}))
+  }),
+);
 
-app.get("/",(req: Request, res: Response) => {
-    res.send("Hello World");
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World");
 });
 
-
-app.use("/api/auth", AuthRoute)
+app.use("/api/auth", AuthRoute);
+app.use("/api/services", ServiceRoute);
 
 
 export default app;

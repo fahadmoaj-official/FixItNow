@@ -1,0 +1,26 @@
+model Services {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  price       Float
+  location    String
+  status      ServiceStatus @default(OPEN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customerId String
+  customer   User @relation(fields: [customerId], references: [id])
+
+  categoryId String
+  category   Categories @relation(fields: [categoryId], references: [id])
+
+  @@map("services")
+}
+
+
+enum ServiceStatus {
+  OPEN
+  ASSIGNED
+  COMPLETED
+  CANCELED
+}
