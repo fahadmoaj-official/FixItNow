@@ -1,1 +1,1 @@
-`cd ~/Downloads/"Code File/bAckend lerning intermediate/FixItNow - Project"`
+cd ~/Downloads/"Code File/bAckend lerning intermediate/FixItNow - Project"
