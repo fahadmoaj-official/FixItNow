@@ -16,3 +16,10 @@ export const generateToken = (
 ): string => {
   return jwt.sign(payload, secret, { expiresIn });
 };
+
+export const verifyToken = (
+    token: string,
+    secret: Secret
+): TJwtPayload => {
+  return jwt.verify(token, secret) as TJwtPayload;
+};
