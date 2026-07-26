@@ -7,6 +7,8 @@ const router = Router();
 router.post("/create",isAuthinticated(UserRole.ADMIN,UserRole.CUSTOMER), ServicesController.CreateAServices);
 
 
+router.get("/",isAuthinticated(UserRole.ADMIN,UserRole.TECHNICIAN,UserRole.CUSTOMER), ServicesController.GetAllServices);
+
 router.get("/categories",isAuthinticated(UserRole.ADMIN,UserRole.TECHNICIAN,UserRole.CUSTOMER), ServicesController.GetAllCategories);
 
 

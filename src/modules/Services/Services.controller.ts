@@ -26,8 +26,38 @@ const CreateAServices = async (req: Request, res: Response) => {
   }
 };
 
+const GetAllServices = async (req: Request, res: Response) => {
+  try {
+
+    const result = await ServicesService.GetAllServicesIntoDb();
+
+     sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+       message: "All Services fetched successfully",
+        data: result,
+
+    });
+  } catch (error) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: "Failed to get all Services",
+      error: error instanceof Error ? error.message : "Something went wrong",
+    });
+  }
+};
+
 const GetAllCategories = async (req: Request, res: Response) => {
   try {
+    const result = await ServicesService.GetAllCategoriesIntoDb();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "All Categories fetched successfully",
+      data: result,
+    });
   } catch (error) {
     sendResponse(res, {
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -41,4 +71,5 @@ const GetAllCategories = async (req: Request, res: Response) => {
 export const ServicesController = {
   CreateAServices,
   GetAllCategories,
+    GetAllServices,
 };
