@@ -1,0 +1,28 @@
+model Bookings {
+  id          String      @id @default(uuid())
+
+  serviceId   String
+  service     Services @relation(fields: [serviceId], references: [id])
+
+
+
+  customerId  String
+  customer    User @relation("customerBookings",fields: [customerId], references: [id])
+
+  workerId    String
+  worker      User @relation("workerBookings",fields: [workerId], references: [id])
+
+  status      BookingStatus @default(CONFIRMED)
+  bookingDate DateTime
+  startTime   DateTime
+  endTime     DateTime
+
+}
+
+
+enum BookingStatus {
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
