@@ -1,0 +1,23 @@
+model Application{
+    id String @id @default(uuid())
+
+    serviceId String
+    service Services @relation(fields: [serviceId], references: [id])
+
+    technicianId String
+    technician User @relation("technicianApplications", fields: [technicianId], references: [id])
+
+    status ApplicationStatus @default(PENDING)
+
+    applicationDate DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("application")
+}
+
+enum ApplicationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    WITHDRAWN
+}

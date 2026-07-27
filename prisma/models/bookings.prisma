@@ -9,13 +9,16 @@ model Bookings {
   customerId  String
   customer    User @relation("customerBookings",fields: [customerId], references: [id])
 
-  workerId    String
-  worker      User @relation("workerBookings",fields: [workerId], references: [id])
+  technicianId    String
+  technician      User @relation("technicianBookings",fields: [technicianId], references: [id])
 
   status      BookingStatus @default(CONFIRMED)
   bookingDate DateTime
   startTime   DateTime
   endTime     DateTime
+
+
+  @@map("bookings")
 
 }
 

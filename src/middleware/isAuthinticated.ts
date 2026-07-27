@@ -48,6 +48,10 @@ const isAuthinticated = (...RequiredRoles: UserRole[]) =>
             if(user?.status === UserStatus.BANNED){
                 return next(new Error("Your account is BLOCKED. Please contact support."));
             }
+            // i want isAuthenticated(UserRoles.ADMIN, UserRoles.CUSTOMER) but never technician can access this route
+            if(RequiredRoles.length > 0 && !RequiredRoles.includes(user?.role as UserRole)){
+                return next(new Error("You are not authorized to access this route,only " + RequiredRoles.join(", ") + " can access this route."));
+            }
 
             if(!user){
                 return next(new Error("User not found. Please log in again."));
