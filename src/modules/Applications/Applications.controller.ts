@@ -85,9 +85,88 @@ const getApplicationsForTechnician = async (req: Request, res: Response) => {
 }
 
 
+const acceptApplication = async (req: Request, res: Response) => {
+    try {
+        const serviceId = req.body?.serviceId as string;
+        const technicianId = req.body?.technicianId as string; 
+
+        const customerId = req.user?.id as string; 
+
+        await ApplicationsService.acceptApplicationIntoDb(serviceId, customerId, technicianId);
+
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: "Application accepted successfully",
+           
+        });
+
+    }catch (error) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: "Failed to accept application",
+            error: error instanceof Error ? error.message : "Something went wrong",
+        });
+    }
+}
+
+const rejectApplication = async (req: Request, res: Response) => {
+    try {
+        const serviceId = req.body?.serviceId as string;
+        const technicianId = req.body?.technicianId as string; 
+
+        const customerId = req.user?.id as string; 
+
+        await ApplicationsService.rejectApplicationIntoDb(serviceId, customerId, technicianId);
+
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: "Application rejected successfully",
+           
+        });
+
+    }catch (error) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: "Failed to reject application",
+            error: error instanceof Error ? error.message : "Something went wrong",
+        });
+    }
+}
+const withdrawApplication = async (req: Request, res: Response) => {
+    try {
+        const serviceId = req.body?.serviceId as string;
+        const technicianId = req.user?.id as string; 
+
+        await ApplicationsService.withdrawApplicationintoDb(serviceId, technicianId);
+
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: "Application withdrawn successfully",
+           
+        });
+
+    }catch (error) {
+        sendResponse(res, {
+            statusCode: 500,
+            success: false,
+            message: "Failed to withdraw application",
+            error: error instanceof Error ? error.message : "Something went wrong",
+        });
+    }
+}
+
+
 
 export const ApplicationsController = {
     applyToService,
     getApplicationsForService,
     getApplicationsForTechnician,
+    acceptApplication,
+    rejectApplication,
+    withdrawApplication
 }
