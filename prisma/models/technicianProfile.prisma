@@ -1,0 +1,16 @@
+model TechnicianProfile{
+    id String @id @default(uuid())
+
+    userId String @unique
+    user User @relation(fields: [userId], references: [id])
+
+
+    bio String?
+    experienceYears Int?
+    skills String[]
+    isAvailable Boolean @default(true)
+    createdAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+
+    @@map("technicianProfile")
+}

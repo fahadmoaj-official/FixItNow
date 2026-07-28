@@ -17,6 +17,10 @@ model Bookings {
   startTime   DateTime
   endTime     DateTime
 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  review Review[]
 
   @@map("bookings")
 
