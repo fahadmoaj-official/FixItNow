@@ -5,11 +5,11 @@ import { BookingsController } from "./bookings.controller";
 const router = Router();
 
 
-router.post("/",isAuthinticated(UserRole.CUSTOMER,UserRole.ADMIN),BookingsController.CreateBooking);
+router.post("/",isAuthinticated(UserRole.CUSTOMER),BookingsController.CreateBooking);
 
-router.get("/",isAuthinticated(UserRole.CUSTOMER,UserRole.ADMIN),BookingsController.GetAllBookings);
+router.get("/",isAuthinticated(UserRole.CUSTOMER),BookingsController.GetAllBookings);
 
-router.get("/:id",isAuthinticated(UserRole.CUSTOMER,UserRole.ADMIN),BookingsController.GetBookingDetailsById);
+router.get("/:bookingId",isAuthinticated(UserRole.CUSTOMER,UserRole.ADMIN),BookingsController.GetBookingDetailsById);
 
 
 
