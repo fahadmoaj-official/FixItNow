@@ -18,10 +18,11 @@ const createReviewIntoDb = async (payload: ReviewPayload, customerId: string) =>
     const booking = await prisma.bookings.findUnique({
         where: {
             id: bookingId,
+            status: "COMPLETED",
         },
     });
 
-    if (!booking || booking.status !== "COMPLETED") {
+    if (!booking || booking.customerId !== customerId) {
         throw new Error("Booking is not yet completed or does not exist");
     }
 

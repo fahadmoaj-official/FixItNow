@@ -9,6 +9,7 @@ import CategoriesRoute from "./modules/categories/categories.route";
 import ApplicationsRoute from "./modules/Applications/Applications.route";
 import TechniciansRoute from "./modules/technicians/technicians.route";
 import ReviewRoute from "./modules/review/review.route";
+import BookingsRoute from "./modules/bookings/bookings.route";
 const app = express();
 
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use("/api/categories", CategoriesRoute);
 app.use("/api/applications", ApplicationsRoute);
 app.use("/api/technicians", TechniciansRoute);
 app.use("/api/reviews", ReviewRoute);
+app.use("/api/bookings", BookingsRoute);
 
 
 export default app;
