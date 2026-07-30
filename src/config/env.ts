@@ -14,6 +14,7 @@ dotenv.config();
     JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN! as SignOptions["expiresIn"],
 
     NODE_ENV: process.env.NODE_ENV!,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY!,
 };
 
 export default env;

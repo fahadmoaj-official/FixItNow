@@ -1,0 +1,27 @@
+model Payment {
+  id String @id @default(uuid())
+
+  bookingId String
+  booking Bookings @relation(fields: [bookingId], references: [id])
+
+  amount Float
+
+  transactionId String? @unique
+
+  status PaymentStatus @default(PENDING)
+
+  paymentMethod PaymentMethod @default(CREDIT_CARD) 
+  createdAt DateTime @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  STRIPE
+}

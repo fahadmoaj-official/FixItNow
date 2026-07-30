@@ -10,6 +10,8 @@ import TechniciansRoute from "./modules/technicians/technicians.route";
 import ReviewRoute from "./modules/review/review.route";
 import BookingsRoute from "./modules/bookings/bookings.route";
 import AdminRoute from "./modules/Admin/Admin.route";
+import PaymentRoute from "./payment/payment.route";
+
 const app = express();
 
 app.use(express.json());
@@ -34,6 +36,7 @@ app.use("/api/technicians", TechniciansRoute);
 app.use("/api/reviews", ReviewRoute);
 app.use("/api/bookings", BookingsRoute);
 app.use("/api/admin", AdminRoute);
+app.use("/api/payments", PaymentRoute);
 
 
 export default app;
