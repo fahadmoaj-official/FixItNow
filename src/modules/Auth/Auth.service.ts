@@ -24,6 +24,8 @@ const registerUserIntoDb = async (payload: RegisterUserPayload) => {
             throw new Error("Invalid role. Role must be either 'CUSTOMER' or 'TECHNICIAN'");
       }
 
+      const transaction = await prisma.$transaction(async (prisma) => {
+
       const user = await prisma.user.create({
             data: {
                   name,
@@ -34,9 +36,26 @@ const registerUserIntoDb = async (payload: RegisterUserPayload) => {
             omit: {
                 password: true
             }
+
+            
       })
 
+       if(role === "TECHNICIAN") {
+            await prisma.technicianProfile.create({
+                  data: {
+                        userId: user.id,
+                       
+                  }
+            })
+      }
+     
+
       return user;
+
+
+      })
+
+     return transaction;
 
 }
 

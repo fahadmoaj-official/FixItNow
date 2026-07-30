@@ -5,8 +5,9 @@ model TechnicianProfile{
     user User @relation(fields: [userId], references: [id])
 
 
-    bio String?
-    experienceYears Int?
+    bio String @default("")
+    experienceYears Int @default(0)
+    rating Float @default(0.0)
     skills String[]
     isAvailable Boolean @default(true)
     createdAt DateTime @default(now())

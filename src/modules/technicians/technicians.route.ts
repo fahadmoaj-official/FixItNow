@@ -5,12 +5,16 @@ import { UserRole } from "../../../generated/prisma/enums";
 const router = Router();
 
 
+router.patch("/profile",isAuthinticated(UserRole.TECHNICIAN), techniciansController.UpdateTechnicianProfile)
+
 router.get("/",techniciansController.GetAllTechnicians)
 
 
-router.get("/:id", techniciansController.GetTechnicianById)
+// router.get("/:id", techniciansController.GetTechnicianById)
+router.put("/availability",isAuthinticated(UserRole.TECHNICIAN), techniciansController.UpdateTechnicianAvailability)
 
-router.post("/profile",isAuthinticated(UserRole.TECHNICIAN), techniciansController.CreateTechnicianProfile)
+router.get("/bookings",isAuthinticated(UserRole.TECHNICIAN), techniciansController.GetTechnicianBookings)
 
+router.patch("/bookings/:bookingId",isAuthinticated(UserRole.TECHNICIAN), techniciansController.UpdateTechnicianBookingStatus)
 
 export default router;
