@@ -91,58 +91,37 @@ const UpdateTechnicianAvailability = async (req:Request, res:Response) => {
     }
 }
 
-
-const GetTechnicianBookings = async (req:Request, res:Response) => {
-     try{
-        const userId = req.user?.id as string;
-        
-        const result = await techniciansService.GetTechnicianBookingsintoDb(userId);
-        sendResponse(res, {
-            statusCode: httpStatus.OK,
-            success: true,
-            message: "Technician profile bookings retrive successfully",
-            data: result,
-          });
-    } catch (error) {
-        sendResponse(res, {
-            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-            success: false,
-            message: "Failed to get technician bookigs",
-            error: error instanceof Error ? error.message : "Internal Server Error",
-          });
-    }
-}
-
-const UpdateTechnicianBookingStatus = async (req:Request, res:Response) => {
+const GetAllBookingsforTechnician = async (req: Request, res: Response) => {
     try{
-        const userId = req.user?.id as string;
-        const bookingId = req.params?.bookingId as string;
-        const status = req.body.status as BookingStatus; 
-        
-        const result = await techniciansService.UpdateTechnicianBookingStatusIntoDb(userId, bookingId, status);
-        sendResponse(res, {
+
+        const customerId = req.user?.id as string;
+
+        const result = await techniciansService.getAllBookingsforTechnician( customerId );
+        sendResponse(res,{
             statusCode: httpStatus.OK,
             success: true,
-            message: "Technician profile booking status updated successfully",
-            data: result,
-          });
-
-    }catch (error) {
-        sendResponse(res, {
+            message: "Bookings fetched successfully",
+            data: result
+        });
+    }catch(err){
+        sendResponse(res,{
             statusCode: httpStatus.INTERNAL_SERVER_ERROR,
             success: false,
-            message: "Failed to update technician booking status",
-            error: error instanceof Error ? error.message : "Internal Server Error",
-          });
+            message: "Failed to fetch bookings",
+            error: err instanceof Error ? err.message : "Internal Server Error",
+        });
     }
 }
+
+
+
 
 export const techniciansController = {
     GetAllTechnicians,
     GetTechnicianById,
     UpdateTechnicianProfile,
     UpdateTechnicianAvailability,
-    GetTechnicianBookings,
-    UpdateTechnicianBookingStatus
+    GetAllBookingsforTechnician
+    
 
 }

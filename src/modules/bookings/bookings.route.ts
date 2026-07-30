@@ -7,9 +7,20 @@ const router = Router();
 
 router.post("/",isAuthinticated(UserRole.CUSTOMER),BookingsController.CreateBooking);
 
-router.get("/",isAuthinticated(UserRole.CUSTOMER),BookingsController.GetAllBookings);
 
-router.get("/:bookingId",isAuthinticated(UserRole.CUSTOMER,UserRole.ADMIN),BookingsController.GetBookingDetailsById);
+
+router.patch("/:bookingId/accept",isAuthinticated(UserRole.TECHNICIAN),BookingsController.UpdateBookingStatusToAccept);
+
+router.patch("/:bookingId/start",isAuthinticated(UserRole.TECHNICIAN),BookingsController.UpdateBookingStatusToStarted);
+
+router.patch("/:bookingId/cancel",isAuthinticated(UserRole.TECHNICIAN),BookingsController.UpdateBookingStatusToRejected);
+
+router.patch("/:bookingId/complete",isAuthinticated(UserRole.TECHNICIAN),BookingsController.UpdateBookingStatusToCompleted);
+
+
+
+
+router.get("/:bookingId",isAuthinticated(UserRole.TECHNICIAN),BookingsController.GetBookingDetailsById);
 
 
 

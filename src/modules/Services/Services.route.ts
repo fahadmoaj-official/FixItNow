@@ -4,7 +4,7 @@ import isAuthinticated from "../../middleware/isAuthinticated";
 import { UserRole } from "../../../generated/prisma/enums";
 const router = Router();
 
-router.post("/create",isAuthinticated(UserRole.ADMIN,UserRole.CUSTOMER), ServicesController.CreateAServices);
+router.post("/create",isAuthinticated(UserRole.ADMIN,UserRole.TECHNICIAN), ServicesController.CreateAServices);
 
 
 router.get("/", ServicesController.GetAllServices);

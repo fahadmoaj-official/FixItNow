@@ -1,4 +1,5 @@
 
+import { BookingStatus } from "../../../generated/prisma/client";
 import prisma from "../../lib/prisma";
 import { IBookingPayload } from "./bookings.interface";
 
@@ -50,29 +51,14 @@ const createBooking = async (payload: IBookingPayload, customerId: string) => {
     return booking;
 }
 
-const getAllBookings = async (customerId: string) => {
 
-    // Fetch all bookings for the given customerId
-    const bookings = await prisma.bookings.findMany({
-        where: {
-            customerId
-        },
-        include: {
-            service: true,
-            technician: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,                }
-            }
-        }
-    });
-    return bookings;
-}
-const getBookingById = async (bookingId: string) => {
+
+
+const getBookingById = async (bookingId: string, technicianId: string) => {
     const booking = await prisma.bookings.findUnique({
         where: {
-            id: bookingId
+            id: bookingId,
+            technicianId: technicianId
         },
         include: {
             service: true,
@@ -82,14 +68,76 @@ const getBookingById = async (bookingId: string) => {
                     name: true,
                     email: true
                 }
+            },
+            customer: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true
+                }
             }
         }
     });
+    if (!booking) {
+        throw new Error("Booking not found or you are not authorized to view this booking");
+    }
     return booking;
+}
+
+
+const updateBookingStatusToAccept = async (bookingId: string) => {
+     
+    const result = await prisma.bookings.update({
+        where: {
+            id: bookingId
+        },
+        data: {
+            status: BookingStatus.CONFIRMED
+        }
+    });
+    return result;
+}
+const updateBookingStatusToStarted = async (bookingId: string) => {
+     const result = await prisma.bookings.update({
+        where: {
+            id: bookingId
+        },
+        data: {
+            status: BookingStatus.IN_PROGRESS
+        }
+    });
+    return result;
+}
+
+const updateBookingStatusToRejected = async (bookingId: string) => {
+     const result = await prisma.bookings.update({
+        where: {
+            id: bookingId
+        },
+        data: {
+            status: BookingStatus.CANCELED
+        }
+    });
+    return result;
+}
+
+const updateBookingStatusToCompleted = async (bookingId: string) => {
+     const result = await prisma.bookings.update({
+        where: {
+            id: bookingId
+        },
+        data: {
+            status: BookingStatus.COMPLETED
+        }
+    });
+    return result;
 }
 
 export default {
     createBooking,
-    getAllBookings,
-    getBookingById
+    getBookingById,
+    updateBookingStatusToAccept,
+    updateBookingStatusToStarted,
+    updateBookingStatusToRejected,
+    updateBookingStatusToCompleted
 }

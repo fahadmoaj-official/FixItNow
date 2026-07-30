@@ -10,11 +10,12 @@ router.patch("/profile",isAuthinticated(UserRole.TECHNICIAN), techniciansControl
 router.get("/",techniciansController.GetAllTechnicians)
 
 
-// router.get("/:id", techniciansController.GetTechnicianById)
 router.put("/availability",isAuthinticated(UserRole.TECHNICIAN), techniciansController.UpdateTechnicianAvailability)
 
-router.get("/bookings",isAuthinticated(UserRole.TECHNICIAN), techniciansController.GetTechnicianBookings)
+// get all pending bookings for current technician
+router.get("/bookings",isAuthinticated(UserRole.TECHNICIAN),techniciansController.GetAllBookingsforTechnician);
 
-router.patch("/bookings/:bookingId",isAuthinticated(UserRole.TECHNICIAN), techniciansController.UpdateTechnicianBookingStatus)
+
+router.get("/:id", techniciansController.GetTechnicianById)
 
 export default router;

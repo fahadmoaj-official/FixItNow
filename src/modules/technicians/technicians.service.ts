@@ -8,7 +8,7 @@ const getAllTechniciansIntoDb = async () => {
             role: "TECHNICIAN"
         },
         include:{
-            technician: true
+            technicianProfiles: true
         },
         omit:{
             password: true,
@@ -35,7 +35,7 @@ const getTechnicianByIdIntoDb = async (id:string) => {
             createdAt: true,
             updatedAt: true
         },include:{
-            technician: true,
+            technicianProfiles: true,
             reviewsReceived: {
                 include: {
                     reviewer: true,
@@ -44,11 +44,13 @@ const getTechnicianByIdIntoDb = async (id:string) => {
         }
     });
 
+    const TotalReviews = await prisma.review.count({});
+
     if(!result){
         throw new Error("Technician not Exist");
     }
 
-    return result;
+    return {result, TotalReviews};
 }
 
 
@@ -94,10 +96,13 @@ const updateTechnicianAvailabilityIntoDb = async (userId:string, isAvailable:boo
 
 }
 
-const GetTechnicianBookingsintoDb = async (technicianId: string) => {
-    const result = await prisma.bookings.findMany({
+const getAllBookingsforTechnician = async (technicianId: string) => {
+
+    // Fetch all bookings for the given customerId
+    const bookings = await prisma.bookings.findMany({
         where: {
-            technicianId: technicianId
+            technicianId: technicianId,
+            status: BookingStatus.PENDING
         },
         include: {
             service: true,
@@ -105,54 +110,23 @@ const GetTechnicianBookingsintoDb = async (technicianId: string) => {
                 select: {
                     id: true,
                     name: true,
-                    email: true
+                    email: true,                
                 }
-            },
+            }
         }
     });
-
-    if(!result || result.length === 0){
-        throw new Error("No bookings found for this technician");
+    if (!bookings || bookings.length === 0) {
+        throw new Error("No Pending bookings found for this technician");
     }
-
-    return result;
+    return bookings;
 }
 
-const UpdateTechnicianBookingStatusIntoDb = async (technicianId: string, bookingId: string, status: BookingStatus) => {
 
-    // check if the booking status is alredy same what you update
-    const existingBooking = await prisma.bookings.findFirst({
-        where: {
-            id: bookingId,
-            technicianId: technicianId,
-            status: status
-        }
-    });
-
-    if(existingBooking){
-        throw new Error("Booking status is already set to the provided value");
-    }
-
-    const result = await prisma.bookings.updateMany({
-        where: {
-            id: bookingId,
-            technicianId: technicianId
-        },
-        data: {
-            status: status
-        }
-    });
-
-    if(result.count === 0){
-        throw new Error("Failed to update booking status. Either booking not found or you are not authorized to update this booking.");
-    }
-}
 
 export const techniciansService = {
     getAllTechniciansIntoDb,
     getTechnicianByIdIntoDb,
     updateTechnicianProfileIntoDb,
     updateTechnicianAvailabilityIntoDb,
-    GetTechnicianBookingsintoDb,
-    UpdateTechnicianBookingStatusIntoDb
+    getAllBookingsforTechnician
 }
