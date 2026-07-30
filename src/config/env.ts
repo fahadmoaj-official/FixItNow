@@ -15,6 +15,7 @@ dotenv.config();
 
     NODE_ENV: process.env.NODE_ENV!,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY!,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET!,
 };
 
 export default env;
