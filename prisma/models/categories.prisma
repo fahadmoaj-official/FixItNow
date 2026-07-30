@@ -1,6 +1,6 @@
 model Categories{
    id         String      @id @default(uuid())
-   name       String
+   name       String @unique
    createdAt  DateTime @default(now())
 
    services Services[]
