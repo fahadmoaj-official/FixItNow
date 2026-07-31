@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import BookingsService from "./bookings.service";
 import httpStatus from "http-status";
 import sendResponse from "../../utils/sendResponse";
+import { get } from "node:http";
 
 const CreateBooking = async (req: Request, res: Response) => {
     try{
@@ -30,10 +31,11 @@ const CreateBooking = async (req: Request, res: Response) => {
 
 const GetBookingDetailsById = async (req: Request, res: Response) => {
      try{
-        const TechnicianId = req.user?.id as string;
+        const UserId = req.user?.id as string;
+        const role = req.user?.role as string;
         const bookingId = req.params.bookingId as string;
 
-    const result = await BookingsService.getBookingById( bookingId , TechnicianId );
+    const result = await BookingsService.getBookingById( bookingId , UserId,role );
         sendResponse(res,{
             statusCode: httpStatus.OK,
             success: true,
@@ -94,14 +96,14 @@ const UpdateBookingStatusToStarted = async (req: Request, res: Response) => {
     }
 }
 
-const UpdateBookingStatusToRejected = async (req: Request, res: Response) => {
+const UpdateBookingStatusToCanceled = async (req: Request, res: Response) => {
     try{
         const bookingId = req.params.bookingId as string;
-        const result = await BookingsService.updateBookingStatusToRejected( bookingId );
+        const result = await BookingsService.updateBookingStatusToCanceled( bookingId );
         sendResponse(res,{
             statusCode: httpStatus.OK,
             success: true,
-            message: "Booking status updated to rejected successfully",
+            message: "Booking status updated to canceled successfully",
             data: result
         });
 
@@ -137,6 +139,46 @@ const UpdateBookingStatusToCompleted = async (req: Request, res: Response) => {
     }
 }
 
+const GetMyBookings = async (req: Request, res: Response) => {
+    try{
+        const userId = req.user?.id as string;
+        const result = await BookingsService.getMyBookingsintoDb(userId);
+        sendResponse(res,{
+            statusCode: httpStatus.OK,
+            success: true,
+            message: "My bookings fetched successfully",
+            data: result
+        });
+    }catch(err){
+        sendResponse(res,{
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "Failed to fetch my bookings",
+            error: err instanceof Error ? err.message : "Internal Server Error",
+        });
+    }
+}
+const GetMyBookingDetailsById = async (req: Request, res: Response) => {
+    try{
+        const userId = req.user?.id as string;
+        const bookingId = req.params.bookingId as string;
+        const result = await BookingsService.GetMybookingDetailsById(userId,bookingId);
+        sendResponse(res,{
+            statusCode: httpStatus.OK,
+            success: true,
+            message: "My booking details fetched successfully",
+            data: result
+        });
+    }catch(err){
+        sendResponse(res,{
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "Failed to fetch my bookings details",
+            error: err instanceof Error ? err.message : "Internal Server Error",
+        });
+    }
+}
+
 
 
 
@@ -145,6 +187,8 @@ export const BookingsController = {
     GetBookingDetailsById,
     UpdateBookingStatusToAccept,
     UpdateBookingStatusToStarted,
-    UpdateBookingStatusToRejected,
-    UpdateBookingStatusToCompleted
+    UpdateBookingStatusToCanceled,
+    UpdateBookingStatusToCompleted,
+    GetMyBookings,
+    GetMyBookingDetailsById
 }
